@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>강서 플라이 미술학원 결산</title>
+<title>강서 플라이미술학원 결산</title>
+<link rel="manifest" href="manifest.json">
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -43,13 +44,8 @@ body {
   z-index: 9999; padding: 40px 30px;
 }
 .login-screen.hidden { display: none; }
-.login-logo {
-  width: 72px; height: 72px; background: rgba(255,255,255,0.15);
-  border-radius: 20px; display: flex; align-items: center; justify-content: center;
-  font-size: 36px; margin-bottom: 24px;
-}
-.login-title { font-size: 20px; font-weight: 700; color: #fff; text-align: center; line-height: 1.4; margin-bottom: 8px; }
-.login-sub { font-size: 13px; color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 48px; }
+.login-title { font-size: 22px; font-weight: 700; color: #fff; text-align: center; line-height: 1.4; margin-bottom: 10px; }
+.login-sub { font-size: 13px; color: rgba(255,255,255,0.6); text-align: center; margin-bottom: 52px; }
 .login-btn {
   width: 100%; padding: 15px;
   background: #fff; color: var(--brand);
@@ -59,14 +55,13 @@ body {
   display: flex; align-items: center; justify-content: center; gap: 10px;
 }
 .login-btn:active { opacity: 0.9; }
-.login-btn svg { width: 20px; height: 20px; }
-.login-err { font-size: 12px; color: rgba(255,200,200,0.9); text-align: center; margin-top: 14px; }
+.login-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+.login-err { font-size: 12px; color: rgba(255,200,200,0.9); text-align: center; margin-top: 16px; min-height: 18px; }
 
-/* ── 동기화 인디케이터 ── */
+/* ── 동기화 ── */
 .sync-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(255,255,255,0.4); flex-shrink: 0;
-  transition: background 0.3s;
+  background: rgba(255,255,255,0.35); flex-shrink: 0; transition: background 0.3s;
 }
 .sync-dot.syncing { background: #ffd700; animation: pulse 1s infinite; }
 .sync-dot.ok      { background: #7fffcc; }
@@ -79,20 +74,26 @@ body {
   display: flex; align-items: center; gap: 8px;
   position: sticky; top: 0; z-index: 200;
 }
+.bell-btn {
+  background: none; border: none; cursor: pointer;
+  padding: 4px; display: flex; align-items: center; justify-content: center;
+  opacity: 0.6; flex-shrink: 0; transition: opacity 0.2s;
+}
+.bell-btn.on { opacity: 1; }
+.bell-btn:active { opacity: 0.4; }
 .hdr-title { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: -0.3px; flex: 1; }
 .date-btn {
   display: flex; align-items: center; gap: 5px;
   background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
   border-radius: 20px; padding: 5px 11px; cursor: pointer;
-  font-size: 12px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  font-size: 12px; font-weight: 700; color: #fff;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
 }
 .logout-btn {
   background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
   border-radius: 20px; padding: 5px 10px; cursor: pointer;
   font-family: 'Noto Sans KR', sans-serif;
-  font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8);
-  white-space: nowrap;
+  font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); white-space: nowrap;
 }
 #dpHidden { position: absolute; opacity: 0; width: 0; height: 0; }
 
@@ -168,9 +169,6 @@ body {
 
 .print-btn { width: 100%; padding: 13px; background: var(--brand); color: #fff; border: none; border-radius: var(--r); font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: 8px; }
 .print-btn:active { opacity: 0.85; }
-.notif-btn { width: 100%; padding: 12px; background: var(--white); border: 1px solid var(--border); border-radius: var(--r); font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 700; color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 8px; }
-.notif-btn.on { border-color: var(--income); color: var(--income); background: #edfaf8; }
-.demo-btn { width: 100%; padding: 10px; background: transparent; color: var(--text3); border: 1px dashed var(--border2); border-radius: var(--r); font-family: 'Noto Sans KR', sans-serif; font-size: 12px; cursor: pointer; margin-bottom: 8px; }
 
 .month-selector { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .month-pill { padding: 6px 14px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 700; color: var(--text2); cursor: pointer; }
@@ -216,7 +214,7 @@ body {
   @page { size: A4 portrait; margin: 14mm 16mm; }
   body { background: #fff; max-width: 100%; padding: 0; font-size: 11px; }
   .login-screen, .hdr, .tabs, .panel:not(#panel-summary),
-  .print-btn, .notif-btn, .demo-btn, .del-btn, .toast, .toggle-btn { display: none !important; }
+  .print-btn, .del-btn, .toast, .toggle-btn { display: none !important; }
   #panel-summary { display: block !important; padding: 0; }
   #grandCatRows { display: block !important; }
   .ph { display: flex !important; }
@@ -235,7 +233,6 @@ body {
 
 <!-- ══ 로그인 화면 ══ -->
 <div class="login-screen" id="loginScreen">
-
   <div class="login-title">강서 플라이미술학원<br>결산</div>
   <div class="login-sub">구글 계정으로 로그인하세요</div>
   <button class="login-btn" onclick="signIn()">
@@ -254,7 +251,12 @@ body {
 <div id="appBody" style="display:none">
 
 <div class="hdr">
-  <span class="hdr-title">강서 플라이 미술학원</span>
+  <button class="bell-btn" id="notifBtn" onclick="setupNotif()" title="알림 설정">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" fill="white"/>
+    </svg>
+  </button>
+  <span class="hdr-title">강서 플라이미술학원</span>
   <div class="date-btn" onclick="openDP()">
     <span id="dateLabel">오늘</span> ▾
   </div>
@@ -272,7 +274,7 @@ body {
 
 <div class="panel on" id="panel-summary">
   <div class="ph">
-    <span class="ph-title">강서 플라이 미술학원 일일결산</span>
+    <span class="ph-title">강서 플라이미술학원 일일결산</span>
     <span class="ph-date" id="phDate"></span>
   </div>
   <div class="net-box">
@@ -332,7 +334,6 @@ body {
     <div id="grandCatRows" style="display:none"></div>
   </div>
   <button class="print-btn" onclick="window.print()">A4 인쇄 / PDF 저장</button>
-  <button class="notif-btn" id="notifBtn" onclick="setupNotif()">알림 설정하기</button>
 </div>
 
 <div class="panel" id="panel-income">
@@ -384,13 +385,10 @@ body {
 </div>
 
 </div><!-- /appBody -->
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════
-//  FIREBASE 설정
-// ════════════════════════════════
+// ── Firebase ──
 const firebaseConfig = {
   apiKey:            "AIzaSyB6B9SZZPtHS8GbHEKzfmE1q3cxrkCfVCM",
   authDomain:        "fly-accounting.firebaseapp.com",
@@ -400,16 +398,11 @@ const firebaseConfig = {
   appId:             "1:300598563514:web:48aa80e341c26c179aa883"
 };
 firebase.initializeApp(firebaseConfig);
-const auth  = firebase.auth();
-const fsdb  = firebase.firestore();
+const auth = firebase.auth();
+const fsdb = firebase.firestore();
 
-// ════════════════════════════════
-//  상수 / 상태
-// ════════════════════════════════
+// ── 상수/상태 ──
 const CATS     = ['인건비','재료비','식대비','교통비','임차/관리비','통신/구독료','지급수수료','기타'];
-const STUDENTS = ['이민준','박서연','김지호','정다은','최현우','윤서진','강민재','오수아','임태양','신예린','한도윤','류지은','조현서','문채원','배준혁','송지안','이서율','김하은','정우진','최아린'];
-const TUITIONS = [200000,220000,240000,260000,280000,300000,320000,350000,380000,400000];
-
 let selDate        = todayStr();
 let payMode        = '카드';
 let selCat         = null;
@@ -418,9 +411,7 @@ let grandVisible   = false;
 let db             = loadLocalDB();
 let unsubscribe    = null;
 
-// ════════════════════════════════
-//  인증
-// ════════════════════════════════
+// ── 인증 ──
 auth.onAuthStateChanged(user => {
   if (user) {
     document.getElementById('loginScreen').classList.add('hidden');
@@ -435,72 +426,51 @@ auth.onAuthStateChanged(user => {
 });
 
 function signIn() {
+  document.getElementById('loginErr').textContent = '';
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider).catch(err => {
     document.getElementById('loginErr').textContent = '로그인 실패: ' + err.message;
   });
 }
-
 function signOut() {
   if (confirm('로그아웃 하시겠어요?')) auth.signOut();
 }
 
-// ════════════════════════════════
-//  Firestore 실시간 동기화
-// ════════════════════════════════
-function setSyncDot(state) {
-  const dot = document.getElementById('syncDot');
-  if (!dot) return;
-  dot.className = 'sync-dot' + (state ? ' ' + state : '');
+// ── Firestore 동기화 ──
+function setSyncDot(s) {
+  const d = document.getElementById('syncDot');
+  if (d) d.className = 'sync-dot' + (s ? ' ' + s : '');
 }
 
 function startSync() {
   setSyncDot('syncing');
   unsubscribe = fsdb.collection('ledger').onSnapshot(snapshot => {
-    snapshot.docChanges().forEach(change => {
-      const dateStr = change.doc.id;
-      if (change.type === 'removed') {
-        delete db[dateStr];
-      } else {
-        db[dateStr] = change.doc.data();
-      }
+    snapshot.docChanges().forEach(ch => {
+      if (ch.type === 'removed') delete db[ch.doc.id];
+      else db[ch.doc.id] = ch.doc.data();
     });
     saveLocalDB();
     renderSummary();
-    const activeDetail = document.getElementById('tab-detail').classList.contains('on');
-    if (activeDetail) renderDetail();
+    if (document.getElementById('tab-detail').classList.contains('on')) renderDetail();
     setSyncDot('ok');
-  }, err => {
-    console.error(err);
-    setSyncDot('err');
-  });
+  }, err => { console.error(err); setSyncDot('err'); });
 }
 
 async function saveToCloud(dateStr) {
   setSyncDot('syncing');
-  try {
-    await fsdb.collection('ledger').doc(dateStr).set(db[dateStr]);
-    setSyncDot('ok');
-  } catch (e) {
-    console.error(e);
-    setSyncDot('err');
-    toast('저장 실패 — 네트워크를 확인해주세요');
-  }
+  try { await fsdb.collection('ledger').doc(dateStr).set(db[dateStr]); setSyncDot('ok'); }
+  catch (e) { console.error(e); setSyncDot('err'); toast('저장 실패 — 네트워크를 확인해주세요'); }
 }
 
 async function deleteFromCloud(dateStr) {
   const d = db[dateStr];
   if (!d) return;
-  if (d.inc.length === 0 && d.exp.length === 0) {
+  if (!d.inc.length && !d.exp.length) {
     try { await fsdb.collection('ledger').doc(dateStr).delete(); } catch {}
-  } else {
-    await saveToCloud(dateStr);
-  }
+  } else { await saveToCloud(dateStr); }
 }
 
-// ════════════════════════════════
-//  로컬 저장
-// ════════════════════════════════
+// ── 유틸 ──
 function todayStr()    { return new Date().toISOString().split('T')[0]; }
 function loadLocalDB() { try { return JSON.parse(localStorage.getItem('fly_v1') || '{}'); } catch { return {}; } }
 function saveLocalDB() { localStorage.setItem('fly_v1', JSON.stringify(db)); }
@@ -519,9 +489,7 @@ function toast(msg) {
   setTimeout(() => t.classList.remove('on'), 2400);
 }
 
-// ════════════════════════════════
-//  UI
-// ════════════════════════════════
+// ── 앱 초기화 ──
 function initApp() {
   document.getElementById('dateLabel').textContent = fmtDate(selDate);
   renderSummary();
@@ -582,9 +550,7 @@ function toggleGrand() {
   document.getElementById('toggleArrow').classList.toggle('open', grandVisible);
 }
 
-// ════════════════════════════════
-//  데이터 CRUD
-// ════════════════════════════════
+// ── CRUD ──
 function addIncome() {
   const name = document.getElementById('iName').value.trim();
   const tuition = rawNum(document.getElementById('iTuition'));
@@ -627,9 +593,7 @@ function delExp(id) {
   saveLocalDB(); deleteFromCloud(selDate); renderSummary();
 }
 
-// ════════════════════════════════
-//  렌더
-// ════════════════════════════════
+// ── 렌더 ──
 function renderSummary() {
   const d = dayData(selDate);
   document.getElementById('phDate').textContent = selDate + ' 결산';
@@ -773,49 +737,7 @@ function toggleDay(id) {
   if (arr) arr.textContent=open?'▲':'▼';
 }
 
-// ════════════════════════════════
-//  샘플 데이터
-// ════════════════════════════════
-async function loadDemo() {
-  if (Object.keys(db).length>0 && !confirm('기존 데이터를 지우고 샘플 데이터를 불러올까요?')) return;
-  db={};
-  const rng=seededRng(42);
-  const batch=fsdb.batch();
-  [{y:2026,m:1,days:31},{y:2026,m:2,days:28},{y:2026,m:3,days:31},{y:2026,m:4,days:3}].forEach(({y,m,days})=>{
-    for (let d=1;d<=days;d++){
-      const ds=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      if (new Date(ds+'T00:00:00').getDay()===0) continue;
-      const n=Math.floor(rng()*4)+2, inc=[], used=new Set();
-      for (let i=0;i<n;i++){
-        let si; do{si=Math.floor(rng()*STUDENTS.length);}while(used.has(si)); used.add(si);
-        inc.push({id:Date.now()+Math.floor(rng()*9999),name:STUDENTS[si],tuition:TUITIONS[Math.floor(rng()*TUITIONS.length)],pay:['카드','카드','카드','현금'][Math.floor(rng()*4)],time:`${9+Math.floor(rng()*10)}:${String(Math.floor(rng()*6)*10).padStart(2,'0')}`});
-      }
-      const exp=[], dow=new Date(ds+'T00:00:00').getDay();
-      if(d===5)  exp.push({id:Date.now()+1,cat:'인건비',     amt:2800000,memo:'강사 월급',  time:'09:00'});
-      if(d===10) exp.push({id:Date.now()+2,cat:'임차/관리비',amt:1500000,memo:'월세+관리비',time:'10:00'});
-      if(d===15) exp.push({id:Date.now()+3,cat:'통신/구독료',amt:110000, memo:'세무 기장료',time:'11:00'});
-      if(dow===2&&rng()>0.3) exp.push({id:Date.now()+4,cat:'재료비',amt:(Math.floor(rng()*8)+3)*10000,memo:'화지·물감',time:'14:00'});
-      if(dow===5&&rng()>0.4) exp.push({id:Date.now()+5,cat:'재료비',amt:(Math.floor(rng()*6)+2)*10000,memo:'소모재료', time:'16:00'});
-      if(rng()>0.6)  exp.push({id:Date.now()+6,cat:'식대비', amt:(Math.floor(rng()*3)+1)*10000,memo:'',time:'13:00'});
-      if(rng()>0.75) exp.push({id:Date.now()+7,cat:'교통비', amt:Math.floor(rng()*2+1)*5000,  memo:'',time:'08:00'});
-      if(rng()>0.88) exp.push({id:Date.now()+8,cat:'기타',   amt:(Math.floor(rng()*3)+1)*10000,memo:'소모품',time:'15:00'});
-      if(inc.length||exp.length){
-        db[ds]={inc,exp};
-        batch.set(fsdb.collection('ledger').doc(ds),{inc,exp});
-      }
-    }
-  });
-  saveLocalDB();
-  await batch.commit();
-  renderSummary();
-  toast('4개월 샘플 데이터 로드 완료!');
-}
-
-function seededRng(seed){let s=seed;return function(){s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/4294967296;};}
-
-// ════════════════════════════════
-//  알림
-// ════════════════════════════════
+// ── 알림 ──
 const NOTIF_MSG = {
   afternoon : '오후 수납 내역 확인해주세요.',
   night     : '오늘 결산 마무리 입력하셨나요?',
@@ -824,41 +746,44 @@ const NOTIF_MSG = {
 };
 
 function setupNotif() {
-  if (Notification.permission==='granted'){toast('이미 알림이 켜져 있어요');return;}
-  if (Notification.permission==='denied'){toast('브라우저 설정 > 알림에서 허용해주세요');return;}
-  Notification.requestPermission().then(p=>{
-    if(p==='granted'){setNotifBtn(true);toast('설정 완료 — 앱이 열려 있으면 자동으로 알려드려요');}
-    else{toast('브라우저 설정 > 알림에서 허용해주세요');}
+  if (Notification.permission==='granted') { toast('이미 알림이 켜져 있어요'); return; }
+  if (Notification.permission==='denied')  { toast('브라우저 설정 > 알림에서 허용해주세요'); return; }
+  Notification.requestPermission().then(p => {
+    if (p==='granted') { setNotifBtn(true); toast('알림 설정 완료'); }
+    else { toast('브라우저 설정 > 알림에서 허용해주세요'); }
   });
 }
 
-function setNotifBtn(on){
-  const btn=document.getElementById('notifBtn');
-  if(!btn)return;
-  btn.textContent=on?'알림 ON ✓':'알림 설정하기';
-  btn.classList.toggle('on',on);
+function setNotifBtn(on) {
+  const btn = document.getElementById('notifBtn');
+  if (!btn) return;
+  btn.classList.toggle('on', on);
+  btn.title = on ? '알림 ON' : '알림 설정하기';
 }
 
-function fireNotif(title,body){
-  if(Notification.permission!=='granted')return;
-  try{new Notification(title,{body,tag:title});}catch(e){}
+function fireNotif(title, body) {
+  if (Notification.permission !== 'granted') return;
+  try { new Notification(title, { body, tag: title }); } catch(e) {}
 }
 
-function lastFriday(year,month){
-  const last=new Date(year,month,0), dow=last.getDay();
-  last.setDate(last.getDate()-(dow>=5?dow-5:dow+2));
+function lastFriday(year, month) {
+  const last = new Date(year, month, 0), dow = last.getDay();
+  last.setDate(last.getDate() - (dow>=5 ? dow-5 : dow+2));
   return last.getDate();
 }
 
-function checkNotif(){
-  if(Notification.permission!=='granted')return;
+function checkNotif() {
+  if (Notification.permission !== 'granted') return;
   const now=new Date(), h=now.getHours(), mi=now.getMinutes();
   const d=now.getDate(), mo=now.getMonth(), y=now.getFullYear(), dow=now.getDay();
   const key=`ntf_${y}_${mo+1}_${d}`;
-  if(h===17&&mi<5&&!localStorage.getItem(key+'_17')){fireNotif('강서 플라이 미술학원',NOTIF_MSG.afternoon);localStorage.setItem(key+'_17','1');}
-  if(h===22&&mi<5&&!localStorage.getItem(key+'_22')){fireNotif('강서 플라이 미술학원',NOTIF_MSG.night);localStorage.setItem(key+'_22','1');}
-  if(d===20&&h===9&&mi<5&&!localStorage.getItem(key+'_sal')){fireNotif('급여일 알림',NOTIF_MSG.salary);localStorage.setItem(key+'_sal','1');}
-  if(dow===5){const lf=lastFriday(y,mo+1);if(d>=lf-6&&d<=lf&&h===10&&mi<5&&!localStorage.getItem(key+'_me')){fireNotif('월말 결산 알림',NOTIF_MSG.monthEnd);localStorage.setItem(key+'_me','1');}}
+  if (h===17&&mi<5&&!localStorage.getItem(key+'_17')) { fireNotif('강서 플라이미술학원', NOTIF_MSG.afternoon); localStorage.setItem(key+'_17','1'); }
+  if (h===22&&mi<5&&!localStorage.getItem(key+'_22')) { fireNotif('강서 플라이미술학원', NOTIF_MSG.night);     localStorage.setItem(key+'_22','1'); }
+  if (d===20&&h===9&&mi<5&&!localStorage.getItem(key+'_sal')) { fireNotif('급여일 알림', NOTIF_MSG.salary);       localStorage.setItem(key+'_sal','1'); }
+  if (dow===5) {
+    const lf=lastFriday(y, mo+1);
+    if (d>=lf-6&&d<=lf&&h===10&&mi<5&&!localStorage.getItem(key+'_me')) { fireNotif('월말 결산 알림', NOTIF_MSG.monthEnd); localStorage.setItem(key+'_me','1'); }
+  }
 }
 </script>
 </body>
